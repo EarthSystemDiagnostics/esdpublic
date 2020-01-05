@@ -1,0 +1,133 @@
+---
+title: "ESD R Package Dependencies"
+author: "Andrew M. Dolman"
+date: "`r Sys.Date()`"
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+
+This analysis relies on the packages being installed somewhere on the system running it. It will not find reverse dependencies for packages that are not installed.  
+
+This also misses published code, e.g. scripts as supplements to papers, that rely on our R packages. 
+
+```{r}
+library(tidyverse)
+library(itdepends)
+```
+
+```{r}
+# ESD public packages 
+esd.public <- sort(c("sedproxy", "psem", "PaleoSpec", "orbitalforcing", "ecustools",
+                "piccr", "cptPicarr", "TrenchR", "corit", "climproxyrecords"))
+```
+
+## List reverse dependencies for all ESD public packages
+```{r}
+rev.deps <- sapply(esd.public, function(i) sort(tools::dependsOnPkgs(i)))
+
+rev.deps
+
+#plyr::ldply(rev.deps, function(x) data.frame(x, stringsAsFactors = F))
+```
+
+## For all ESD public packages, list their dependencies on other ESD packages 
+```{r}
+ESDDependsOnESD <- function(pkg, pkgs, db){
+  x <- tools::package_dependencies(package=pkg, recursive=FALSE, db=db)
+  x[[1]][x[[1]] %in% pkgs]
+}
+
+IP <- installed.packages()
+
+ESDDependsOnESD("psem", esd.public, db = IP)
+
+sapply(esd.public, function(i) ESDDependsOnESD(i, esd.public, db=IP))
+```
+
+# In more detail
+
+Use package "itdepends" to count function call per package
+
+```{r}
+all.calls <- data.frame(focal.package = esd.public, stringsAsFactors = FALSE) %>% 
+  group_by(focal.package) %>% 
+  do({
+    itdepends::dep_usage_pkg(.$focal.package)
+  })
+
+# exclude "base" and "self"
+all.calls.pkg <- all.calls %>% 
+  filter(pkg != "base",
+         focal.package != pkg) %>% 
+  count(pkg) %>% 
+  arrange(focal.package, desc(n))
+
+all.calls.pkg
+```
+
+
+```{r}
+all.calls.fun <- all.calls %>% 
+  filter(pkg != "base", 
+         focal.package != pkg) %>% 
+  group_by(focal.package, pkg) %>%
+  count(fun) %>%
+  arrange(focal.package, desc(n)) 
+```
+
+### Plot calls per package
+
+```{r}
+all.calls.pkg %>% 
+  ggplot(aes(x = reorder(pkg, n), y = n, fill = pkg)) +
+  geom_col() +
+  facet_wrap(~focal.package, scales = "free") +
+  coord_flip()
+```
+
+
+### Plot calls per function
+
+```{r}
+all.calls.fun %>% 
+  ggplot(aes(x = fun, y = n, fill = pkg)) +
+  geom_col() +
+  facet_wrap(~focal.package, scales = "free") +
+  coord_flip()
+```
+
+### Just look at psem
+
+```{r}
+all.calls.fun %>% 
+  filter(focal.package == "psem") %>% 
+  ggplot(aes(x = reorder(fun, -n), y = n, fill = pkg)) +
+  geom_col() +
+  facet_wrap(~focal.package, scales = "free") +
+  coord_flip()
+```
+
+### Just look at cptPicarr
+```{r}
+all.calls.fun %>% 
+  filter(focal.package == "cptPicarr") %>% 
+  ggplot(aes(x = reorder(fun, -n), y = n, fill = pkg)) +
+  geom_col() +
+  facet_wrap(~focal.package, scales = "free") +
+  coord_flip()
+```
+
+
+### Just look at ESD packages
+
+```{r}
+all.calls.fun %>% 
+  filter(pkg %in% esd.public) %>% 
+  ggplot(aes(x = reorder(fun, -n), y = n, fill = pkg)) +
+  geom_col() +
+  facet_wrap(~focal.package, scales = "free") +
+  coord_flip()
+```
+
+
