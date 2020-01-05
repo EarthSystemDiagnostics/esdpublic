@@ -1,0 +1,35 @@
+Package: esdpublic
+Title: Load all public ESD packages
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Andrew",
+           family = "Dolman",
+           role = c("aut", "cre"),
+           email = c("andrew.dolman@awi.de"))
+Description: A metapackage to install and load all public ESD packages.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Depends: 
+    sedproxy (>= 0.6),
+    psem (>= 0.10),
+    PaleoSpec (>= 0.1.0),
+    orbitalforcing (>= 0.1),
+    ecustools (>= 0.1),
+    piccr,
+    cptPicarr,
+    TrenchR,
+    corit,
+    climproxyrecords
+Remotes: 
+    earthsystemdiagnostics/sedproxy,
+    earthsystemdiagnostics/psem,
+    earthsystemdiagnostics/paleospec,
+    earthsystemdiagnostics/orbitalforcing,
+    earthsystemdiagnostics/ecustools,
+    earthsystemdiagnostics/piccr,  
+    earthsystemdiagnostics/cpt-picarr,
+    earthsystemdiagnostics/TrenchR,
+    earthsystemdiagnostics/corit,
+    earthsystemdiagnostics/climproxyrecords
+RoxygenNote: 7.0.2
