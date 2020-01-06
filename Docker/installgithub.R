@@ -1,6 +1,6 @@
 # Github package installation script
 
-Sys.setenv(GITHUB_PAT="7a3f740b0305b87c30c9e0d0d7d0444f62a67371")
+Sys.setenv(GITHUB_PAT=GITHUB_PAT)
 
 Sys.getenv("GITHUB_PAT")
 
