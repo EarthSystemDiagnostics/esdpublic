@@ -16,4 +16,4 @@ ENV GITHUB_PAT $GITHUB_PAT
 
 ##RUN Rscript tmp/installgithub.R
 
-RUN Rscript 'Sys.setenv(GITHUB_PAT=GITHUB_PAT) && remotes::install_github(c("earthsystemdiagnostics/esdpublic"), dependencies=NA, build_vignettes=FALSE)'
+RUN Rscript -e 'Sys.setenv(GITHUB_PAT=GITHUB_PAT) && remotes::install_github(c("earthsystemdiagnostics/esdpublic"), dependencies=NA, build_vignettes=FALSE)'
