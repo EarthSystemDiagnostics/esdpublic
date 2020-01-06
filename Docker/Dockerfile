@@ -7,4 +7,8 @@ RUN apt-get -y update && apt-get -y install libnetcdf-dev libnetcdff-dev
 RUN apt-get -y install libgeos++-dev
 
 ## Install Github dependencies
-RUN Rscript -e 'remotes::install_github(c("earthsystemdiagnostics/esdpublic"),  dependencies=NA, build_vignettes=FALSE)'
+
+COPY ./installgithub.R /tmp/installgithub.R
+
+RUN Rscript tmp/installgithub.R
+
