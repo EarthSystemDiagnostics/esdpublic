@@ -6,9 +6,6 @@ RUN apt-get -y update && apt-get -y install libnetcdf-dev libnetcdff-dev
 ## Install libgeos
 RUN apt-get -y install libgeos++-dev
 
-ARG GITHUB_PAT
-ENV GITHUB_PAT $GITHUB_PAT
-
 
 ## Install Github dependencies
 
@@ -16,4 +13,9 @@ ENV GITHUB_PAT $GITHUB_PAT
 
 ##RUN Rscript tmp/installgithub.R
 
-RUN Rscript -e 'Sys.getenv("GITHUB_PAT") && remotes::install_github(c("earthsystemdiagnostics/esdpublic"), dependencies=NA, build_vignettes=FALSE)'
+##ARG GITHUB_PAT
+##ENV GITHUB_PAT $GITHUB_PAT
+
+##RUN Rscript -e 'Sys.getenv("GITHUB_PAT") && remotes::install_github(c("earthsystemdiagnostics/esdpublic"), dependencies=NA, build_vignettes=FALSE)'
+
+RUN Rscript -e 'remotes::install_github(c("earthsystemdiagnostics/esdpublic"), dependencies=NA, build_vignettes=FALSE)'

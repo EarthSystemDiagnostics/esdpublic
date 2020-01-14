@@ -19,7 +19,7 @@ library(itdepends)
 ```{r}
 # ESD public packages 
 esd.public <- sort(c("sedproxy", "psem", "PaleoSpec", "orbitalforcing", "ecustools",
-                "piccr", "cptPicarr", "TrenchR", "corit", "climproxyrecords"))
+                "piccr", "cptPicarr", "TrenchR", "corit"))
 ```
 
 ## List reverse dependencies for all ESD public packages
@@ -40,7 +40,7 @@ ESDDependsOnESD <- function(pkg, pkgs, db){
 
 IP <- installed.packages()
 
-ESDDependsOnESD("psem", esd.public, db = IP)
+ESDDependsOnESD("climproxyrecords", esd.public, db = IP)
 
 sapply(esd.public, function(i) ESDDependsOnESD(i, esd.public, db=IP))
 ```
@@ -50,7 +50,8 @@ sapply(esd.public, function(i) ESDDependsOnESD(i, esd.public, db=IP))
 Use package "itdepends" to count function call per package
 
 ```{r}
-all.calls <- data.frame(focal.package = esd.public, stringsAsFactors = FALSE) %>% 
+all.calls <- data.frame(focal.package = esd.public,
+                        stringsAsFactors = FALSE) %>% 
   group_by(focal.package) %>% 
   do({
     itdepends::dep_usage_pkg(.$focal.package)
@@ -118,6 +119,15 @@ all.calls.fun %>%
   coord_flip()
 ```
 
+### Just look at pfields
+```{r}
+all.calls.fun %>% 
+  filter(focal.package == "pfields") %>% 
+  ggplot(aes(x = reorder(fun, -n), y = n, fill = pkg)) +
+  geom_col() +
+  facet_wrap(~focal.package, scales = "free") +
+  coord_flip()
+```
 
 ### Just look at ESD packages
 
