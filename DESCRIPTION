@@ -20,7 +20,12 @@ Depends:
     cptPicarr,
     TrenchR,
     corit,
-    climproxyrecords
+    climproxyrecords,
+    grfxtools,
+    stattools,
+    prxytools,
+    geostools,
+    ncdftools
 Remotes: 
     earthsystemdiagnostics/sedproxy,
     earthsystemdiagnostics/psem,
@@ -31,5 +36,10 @@ Remotes:
     earthsystemdiagnostics/cpt-picarr,
     earthsystemdiagnostics/TrenchR,
     earthsystemdiagnostics/corit,
-    earthsystemdiagnostics/climproxyrecords
+    earthsystemdiagnostics/climproxyrecords,
+    earthsystemdiagnostics/grfxtools,
+    earthsystemdiagnostics/stattools,
+    earthsystemdiagnostics/prxytools,
+    earthsystemdiagnostics/geostools,
+    earthsystemdiagnostics/ncdftools
 RoxygenNote: 7.0.2

@@ -19,7 +19,8 @@ library(itdepends)
 ```{r}
 # ESD public packages 
 esd.public <- sort(c("sedproxy", "psem", "PaleoSpec", "orbitalforcing", "ecustools",
-                "piccr", "cptPicarr", "TrenchR", "corit"))
+                "piccr", "cptPicarr", "TrenchR", "corit",
+                "prxytools", "stattools"))
 ```
 
 ## List reverse dependencies for all ESD public packages
@@ -103,6 +104,17 @@ all.calls.fun %>%
 ```{r}
 all.calls.fun %>% 
   filter(focal.package == "psem") %>% 
+  ggplot(aes(x = reorder(fun, -n), y = n, fill = pkg)) +
+  geom_col() +
+  facet_wrap(~focal.package, scales = "free") +
+  coord_flip()
+```
+
+### Sedproxy
+
+```{r}
+all.calls.fun %>% 
+  filter(focal.package == "sedproxy") %>% 
   ggplot(aes(x = reorder(fun, -n), y = n, fill = pkg)) +
   geom_col() +
   facet_wrap(~focal.package, scales = "free") +
