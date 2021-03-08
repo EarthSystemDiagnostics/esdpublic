@@ -18,9 +18,9 @@ library(itdepends)
 
 ```{r}
 # ESD public packages 
-esd.public <- sort(c("sedproxy", "psem", "PaleoSpec", "orbitalforcing", "ecustools",
-                "piccr", "cptPicarr", "TrenchR", "corit",
-                "prxytools", "stattools"))
+esd.public <- sort(c("sedproxy", "psem", "PaleoSpec", "orbitalforcing",
+                "piccr", "cptPicarr", "TrenchR", "corit", "ecustools",
+                "prxytools", "stattools", "grfxtools", "geostools", "ncdftools"))
 ```
 
 ## List reverse dependencies for all ESD public packages
@@ -41,8 +41,6 @@ ESDDependsOnESD <- function(pkg, pkgs, db){
 
 IP <- installed.packages()
 
-ESDDependsOnESD("climproxyrecords", esd.public, db = IP)
-
 sapply(esd.public, function(i) ESDDependsOnESD(i, esd.public, db=IP))
 ```
 
@@ -51,6 +49,9 @@ sapply(esd.public, function(i) ESDDependsOnESD(i, esd.public, db=IP))
 Use package "itdepends" to count function call per package
 
 ```{r}
+# install.packages("devtools")
+#devtools::install_github("jimhester/itdepends")
+
 all.calls <- data.frame(focal.package = esd.public,
                         stringsAsFactors = FALSE) %>% 
   group_by(focal.package) %>% 
