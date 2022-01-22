@@ -153,3 +153,57 @@ all.calls.fun %>%
 ```
 
 
+```{r}
+# wrapper function to do the work
+GetFCalls <- function(package, 
+                      level = c("package", "function"),
+                      exclude_base_recommended = TRUE, 
+                      exclude_self = TRUE){
+  
+  level <- match.arg(level)
+  
+  base.packs <- names(which(installed.packages()[ ,"Priority"] == "base", ))
+  rec.packs <- names(which(available.packages(
+    repos = c(CRAN = "https://cran.r-project.org"))[ ,"Priority"] == "recommended", ))
+  
+  all.calls <- data.frame(focal.package = package,
+                          stringsAsFactors = FALSE) %>% 
+    group_by(focal.package) %>% 
+    do({
+      itdepends::dep_usage_pkg(.$focal.package)
+    })
+  
+  if (exclude_base_recommended){
+    all.calls <- all.calls %>%
+      filter(pkg %in% c(base.packs, rec.packs) == FALSE)
+  }
+  
+  if (exclude_self) {
+    all.calls <- all.calls %>%
+      filter(focal.package != pkg)
+  }  
+  
+  if (level == "package"){
+    all.calls <- all.calls %>%
+    count(pkg) %>% 
+    arrange(focal.package, desc(n))
+  }
+  
+  if (level == "function"){
+    all.calls <- all.calls %>%
+      count(pkg, fun) %>% 
+      arrange(focal.package, desc(n))
+  }
+  
+  all.calls
+  
+  
+}
+
+GetFCalls("esd.public", exclude_self = TRUE, level = "f")
+
+
+GetFCalls("hamstr", exclude_self = TRUE, level = "p") 
+
+```
+
